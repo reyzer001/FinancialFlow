@@ -1,0 +1,129 @@
+ FITUR-FITUR UTAMA APLIKASI AKUNTANSI (SEPERTI ACCURATE)
+1. 🧾 Manajemen Penjualan (Sales)
+Pembuatan Penawaran Penjualan (Sales Quotation)
+
+Pesanan Penjualan (Sales Order)
+
+Faktur Penjualan (Sales Invoice)
+
+Retur Penjualan (Sales Return)
+
+Pembayaran Piutang (Receive Payment)
+
+Daftar pelanggan & saldo piutang
+
+Laporan penjualan per periode, produk, atau pelanggan
+
+2. 📥 Manajemen Pembelian (Purchasing)
+Permintaan Pembelian (Purchase Request)
+
+Pesanan Pembelian (Purchase Order)
+
+Faktur Pembelian (Purchase Invoice)
+
+Retur Pembelian (Purchase Return)
+
+Pembayaran Hutang (Pay Bills)
+
+Daftar vendor & saldo hutang
+
+Laporan pembelian per produk/vendor
+
+3. 📦 Manajemen Persediaan (Inventory)
+Stok barang & jasa
+
+Multi gudang (Warehouse Management)
+
+Transfer stok antar gudang
+
+Penyesuaian persediaan (Stock Adjustment)
+
+Opname stok (Stock Opname)
+
+Kategori barang, satuan, dan HPP otomatis
+
+Laporan kartu stok & nilai persediaan
+
+4. 💳 Kas & Bank
+Kas masuk dan kas keluar
+
+Transfer antar rekening
+
+Pencatatan giro/cash/transfer
+
+Rekonsiliasi bank
+
+Daftar akun kas/bank
+
+Laporan arus kas (Cash Flow Statement)
+
+5. 🧾 Jurnal Umum & Buku Besar (General Ledger)
+Entri jurnal manual (General Journal)
+
+Posting otomatis dari transaksi penjualan, pembelian, dll.
+
+Buku besar umum
+
+Buku besar pembantu (piutang, hutang)
+
+Neraca saldo (Trial Balance)
+
+6. 📈 Laporan Keuangan (Financial Report)
+Laporan Laba Rugi (Profit & Loss Statement)
+
+Neraca Keuangan (Balance Sheet)
+
+Arus Kas (Cash Flow)
+
+Perubahan Modal
+
+Laporan per proyek/departemen (jika diperlukan)
+
+7. 🏢 Manajemen Aset Tetap
+Tambah, edit, dan hapus aset
+
+Penyusutan otomatis (Straight line, Declining balance)
+
+Penghapusan atau penjualan aset
+
+Laporan nilai buku aset
+
+8. 🧩 Manajemen Proyek & Departemen (Opsional Tambahan)
+Pencatatan transaksi berdasarkan proyek atau unit kerja
+
+Laporan keuangan per proyek/departemen
+
+9. 🧑‍💼 Penggajian & HR (Payroll - opsional lanjutan)
+Master karyawan & jabatan
+
+Perhitungan gaji, tunjangan, potongan, lembur
+
+PPh 21, BPJS Kesehatan & Ketenagakerjaan
+
+Slip gaji
+
+Absensi & cuti
+
+10. 📊 Dashboard Interaktif
+Grafik arus kas, penjualan vs pembelian
+
+Saldo kas, stok, piutang & hutang
+
+Notifikasi jatuh tempo
+
+Ringkasan performa keuangan
+
+11. ⚙️ Fitur Tambahan Pendukung
+Multi user & multi role (admin, akuntan, supervisor)
+
+Hak akses per modul (role-based permission)
+
+Multi cabang (jika diperlukan)
+
+Manajemen pajak (PPN, PPh)
+
+Ekspor PDF & Excel laporan
+
+Backup & restore data
+
+Apakah Anda ingin saya bantu:
