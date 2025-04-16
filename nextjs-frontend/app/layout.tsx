@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { LanguageProvider } from '@/hooks/use-language';
 import { CurrencyProvider } from '@/hooks/use-currency';
+import { ReactQueryProvider } from '@/lib/providers';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,11 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <CurrencyProvider>
-          <LanguageProvider>
-            {children}
-          </LanguageProvider>
-        </CurrencyProvider>
+        <ReactQueryProvider>
+          <CurrencyProvider>
+            <LanguageProvider>
+              {children}
+            </LanguageProvider>
+          </CurrencyProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   )
