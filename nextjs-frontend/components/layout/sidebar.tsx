@@ -17,17 +17,20 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useLanguage } from "@/hooks/use-language";
+import { t } from "@/lib/translations";
 
 interface SidebarItemProps {
   icon: React.ReactNode;
-  title: string;
+  titleKey: string;
   href?: string;
-  children?: { title: string; href: string }[];
+  children?: { titleKey: string; href: string }[];
   isOpen: boolean;
 }
 
-function SidebarItem({ icon, title, href, children, isOpen }: SidebarItemProps) {
+function SidebarItem({ icon, titleKey, href, children, isOpen }: SidebarItemProps) {
   const [expanded, setExpanded] = useState(false);
+  const { language } = useLanguage();
   
   if (children) {
     return (
@@ -39,7 +42,7 @@ function SidebarItem({ icon, title, href, children, isOpen }: SidebarItemProps) 
           <span className="mr-2">{icon}</span>
           {isOpen && (
             <>
-              <span className="flex-1 text-left">{title}</span>
+              <span className="flex-1 text-left">{t(titleKey, language)}</span>
               {expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
             </>
           )}
@@ -53,7 +56,7 @@ function SidebarItem({ icon, title, href, children, isOpen }: SidebarItemProps) 
                 href={child.href}
                 className="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition-colors"
               >
-                {child.title}
+                {t(child.titleKey, language)}
               </Link>
             ))}
           </div>
@@ -65,12 +68,14 @@ function SidebarItem({ icon, title, href, children, isOpen }: SidebarItemProps) 
   return (
     <Link href={href || "#"} className="flex items-center p-2 mb-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
       <span className="mr-2">{icon}</span>
-      {isOpen && <span>{title}</span>}
+      {isOpen && <span>{t(titleKey, language)}</span>}
     </Link>
   );
 }
 
 export default function Sidebar({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
+  const { language } = useLanguage();
+  
   return (
     <aside 
       className={`fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transform ${
@@ -90,103 +95,103 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean, onClose:
       </div>
 
       <nav className="flex-1 p-4 overflow-y-auto space-y-1">
-        <SidebarItem icon={<Home className="h-5 w-5" />} title="Dashboard" href="/dashboard" isOpen={isOpen} />
+        <SidebarItem icon={<Home className="h-5 w-5" />} titleKey="common.dashboard" href="/dashboard" isOpen={isOpen} />
         
         <SidebarItem 
           icon={<ShoppingCart className="h-5 w-5" />} 
-          title="Penjualan" 
+          titleKey="common.sales" 
           isOpen={isOpen}
           children={[
-            { title: "Quotation", href: "/sales/quotation" },
-            { title: "Order", href: "/sales/order" },
-            { title: "Invoice", href: "/sales/invoice" },
-            { title: "Retur", href: "/sales/return" },
-            { title: "Customers", href: "/sales/customers" },
+            { titleKey: "sales.quotes", href: "/sales/quotation" },
+            { titleKey: "common.order", href: "/sales/order" },
+            { titleKey: "sales.invoices", href: "/sales/invoice" },
+            { titleKey: "sales.returns", href: "/sales/return" },
+            { titleKey: "sales.customers", href: "/sales/customers" },
           ]}
         />
         
         <SidebarItem 
           icon={<CreditCard className="h-5 w-5" />} 
-          title="Pembelian" 
+          titleKey="common.purchases" 
           isOpen={isOpen}
           children={[
-            { title: "Request", href: "/purchase/request" },
-            { title: "Order", href: "/purchase/order" },
-            { title: "Invoice", href: "/purchase/invoice" },
-            { title: "Retur", href: "/purchase/return" },
-            { title: "Vendors", href: "/purchase/vendors" },
+            { titleKey: "purchases.request", href: "/purchase/request" },
+            { titleKey: "common.order", href: "/purchase/order" },
+            { titleKey: "purchases.bills", href: "/purchase/invoice" },
+            { titleKey: "purchases.returns", href: "/purchase/return" },
+            { titleKey: "purchases.vendors", href: "/purchase/vendors" },
           ]}
         />
         
         <SidebarItem 
           icon={<Package2 className="h-5 w-5" />} 
-          title="Persediaan" 
+          titleKey="common.inventory" 
           isOpen={isOpen}
           children={[
-            { title: "Produk", href: "/inventory/products" },
-            { title: "Gudang", href: "/inventory/warehouses" },
-            { title: "Penyesuaian", href: "/inventory/adjustments" },
-            { title: "Transfer", href: "/inventory/transfers" },
-            { title: "Stok Opname", href: "/inventory/stocktake" },
+            { titleKey: "inventory.products", href: "/inventory/products" },
+            { titleKey: "inventory.warehouses", href: "/inventory/warehouses" },
+            { titleKey: "inventory.adjustments", href: "/inventory/adjustments" },
+            { titleKey: "inventory.transfers", href: "/inventory/transfers" },
+            { titleKey: "inventory.stocktake", href: "/inventory/stocktake" },
           ]}
         />
         
         <SidebarItem 
           icon={<ArrowDownUp className="h-5 w-5" />} 
-          title="Kas & Bank" 
+          titleKey="common.cash_bank" 
           isOpen={isOpen}
           children={[
-            { title: "Kas Masuk", href: "/cash/in" },
-            { title: "Kas Keluar", href: "/cash/out" },
-            { title: "Transfer", href: "/cash/transfer" },
-            { title: "Rekonsiliasi", href: "/cash/reconciliation" },
+            { titleKey: "cash_bank.cash_in", href: "/cash/in" },
+            { titleKey: "cash_bank.cash_out", href: "/cash/out" },
+            { titleKey: "cash_bank.transfer", href: "/cash/transfer" },
+            { titleKey: "cash_bank.reconciliation", href: "/cash/reconciliation" },
           ]}
         />
         
         <SidebarItem 
           icon={<FileText className="h-5 w-5" />} 
-          title="Akuntansi" 
+          titleKey="common.accounting" 
           isOpen={isOpen}
           children={[
-            { title: "Jurnal Umum", href: "/accounting/journal" },
-            { title: "Buku Besar", href: "/accounting/ledger" },
-            { title: "Daftar Akun", href: "/accounting/coa" },
+            { titleKey: "accounting.journal_entries", href: "/accounting/journal" },
+            { titleKey: "accounting.general_ledger", href: "/accounting/ledger" },
+            { titleKey: "accounting.chart_of_accounts", href: "/accounting/coa" },
           ]}
         />
         
         <SidebarItem 
           icon={<BarChart2 className="h-5 w-5" />} 
-          title="Laporan" 
+          titleKey="common.reports" 
           isOpen={isOpen}
           children={[
-            { title: "Laba Rugi", href: "/reports/profit-loss" },
-            { title: "Neraca", href: "/reports/balance-sheet" },
-            { title: "Arus Kas", href: "/reports/cash-flow" },
-            { title: "Laporan Pajak", href: "/reports/tax" },
+            { titleKey: "reports.income_statement", href: "/reports/profit-loss" },
+            { titleKey: "reports.balance_sheet", href: "/reports/balance-sheet" },
+            { titleKey: "reports.cash_flow", href: "/reports/cash-flow" },
+            { titleKey: "reports.tax_summary", href: "/reports/tax" },
           ]}
         />
         
         <SidebarItem 
           icon={<Building2 className="h-5 w-5" />} 
-          title="Aset Tetap" 
+          titleKey="common.fixed_assets" 
           isOpen={isOpen}
           children={[
-            { title: "Daftar Aset", href: "/assets/list" },
-            { title: "Penyusutan", href: "/assets/depreciation" },
+            { titleKey: "fixed_assets.list", href: "/assets/list" },
+            { titleKey: "fixed_assets.depreciation", href: "/assets/depreciation" },
           ]}
         />
         
         <SidebarItem 
           icon={<Users className="h-5 w-5" />} 
-          title="Pengguna" 
+          titleKey="common.users" 
           isOpen={isOpen}
           children={[
-            { title: "Daftar Pengguna", href: "/users" },
-            { title: "Hak Akses", href: "/users/roles" },
+            { titleKey: "users.list", href: "/users" },
+            { titleKey: "users.roles", href: "/users/roles" },
           ]}
         />
         
-        <SidebarItem icon={<Settings className="h-5 w-5" />} title="Pengaturan" href="/settings" isOpen={isOpen} />
+        <SidebarItem icon={<Settings className="h-5 w-5" />} titleKey="common.settings" href="/settings" isOpen={isOpen} />
       </nav>
       
       <div className="p-4 border-t border-gray-200 dark:border-gray-800">
@@ -196,7 +201,7 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean, onClose:
           </div>
           {isOpen && (
             <div>
-              <div className="font-medium text-sm">User Admin</div>
+              <div className="font-medium text-sm">{t('common.admin_user', language)}</div>
               <div className="text-xs text-gray-500 dark:text-gray-400">admin@finledger.com</div>
             </div>
           )}

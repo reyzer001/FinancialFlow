@@ -2,7 +2,7 @@
 
 import React from "react";
 import DashboardLayout from "@/components/layout/dashboard-layout";
-import { formatRupiah, formatShortDate, getStatusColor } from "@/lib/utils";
+import { formatRupiah, formatShortDate, getStatusColor, formatCurrency } from "@/lib/utils";
 import { 
   AreaChart, 
   BarChartComponent, 
@@ -33,6 +33,9 @@ import {
   ShoppingCart, 
   Users
 } from "lucide-react";
+import { useLanguage } from "@/hooks/use-language";
+import { useCurrency } from "@/hooks/use-currency";
+import { t } from "@/lib/translations";
 
 // Sample data untuk dashboard
 // Pada implementasi sebenarnya, data ini akan diambil dari API
@@ -142,13 +145,16 @@ const duePayments = [
 ];
 
 export default function DashboardPage() {
+  const { language } = useLanguage();
+  const { currency } = useCurrency();
+  
   return (
     <DashboardLayout>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('dashboard.title', language)}</h1>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
-            Periode: {new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}
+            {t('dashboard.period', language)}: {new Date().toLocaleDateString(language === 'id' ? 'id-ID' : 'en-US', { month: 'long', year: 'numeric' })}
           </span>
         </div>
       </div>
@@ -157,67 +163,67 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Total Penjualan
+              {t('dashboard.total_sales', language)}
             </CardTitle>
             <ShoppingCart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {formatRupiah(8120000000)}
+              {formatCurrency(8120000000, currency)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
               <span className="text-emerald-500 flex items-center">
                 <ArrowUp className="mr-1 h-3 w-3" />
                 +18.2%
               </span>{" "}
-              dari bulan lalu
+              {t('dashboard.from_last_month', language)}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Total Pembelian
+              {t('dashboard.total_purchases', language)}
             </CardTitle>
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {formatRupiah(4570000000)}
+              {formatCurrency(4570000000, currency)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
               <span className="text-emerald-500 flex items-center">
                 <ArrowUp className="mr-1 h-3 w-3" />
                 +7.5%
               </span>{" "}
-              dari bulan lalu
+              {t('dashboard.from_last_month', language)}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Laba Kotor
+              {t('dashboard.gross_profit', language)}
             </CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {formatRupiah(3550000000)}
+              {formatCurrency(3550000000, currency)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
               <span className="text-emerald-500 flex items-center">
                 <ArrowUp className="mr-1 h-3 w-3" />
                 +12.8%
               </span>{" "}
-              dari bulan lalu
+              {t('dashboard.from_last_month', language)}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Jumlah Pelanggan
+              {t('dashboard.customer_count', language)}
             </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -228,7 +234,7 @@ export default function DashboardPage() {
                 <ArrowUp className="mr-1 h-3 w-3" />
                 +4.6%
               </span>{" "}
-              dari bulan lalu
+              {t('dashboard.from_last_month', language)}
             </p>
           </CardContent>
         </Card>
@@ -237,9 +243,9 @@ export default function DashboardPage() {
       <div className="grid gap-4 grid-cols-1 md:grid-cols-7 mb-6">
         <Card className="md:col-span-5">
           <CardHeader>
-            <CardTitle>Penjualan vs Pembelian vs Laba</CardTitle>
+            <CardTitle>{t('dashboard.sales_purchases_profit_comparison', language)}</CardTitle>
             <CardDescription>
-              Perbandingan nilai penjualan, pembelian, dan laba yang dihasilkan selama 12 bulan terakhir
+              {t('dashboard.comparison_description', language)}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -252,9 +258,9 @@ export default function DashboardPage() {
         </Card>
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle>Penjualan per Kategori</CardTitle>
+            <CardTitle>{t('dashboard.sales_by_category', language)}</CardTitle>
             <CardDescription>
-              Distribusi penjualan berdasarkan kategori produk
+              {t('dashboard.category_distribution', language)}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -269,9 +275,9 @@ export default function DashboardPage() {
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 mb-6">
         <Card>
           <CardHeader>
-            <CardTitle>Transaksi Terkini</CardTitle>
+            <CardTitle>{t('dashboard.recent_transactions', language)}</CardTitle>
             <CardDescription>
-              Daftar transaksi penjualan terbaru
+              {t('dashboard.recent_sales_list', language)}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -292,18 +298,18 @@ export default function DashboardPage() {
                         {transaction.customer}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {transaction.id} • {formatShortDate(transaction.date)}
+                        {transaction.id} • {formatShortDate(transaction.date, language === 'id' ? 'id-ID' : 'en-US')}
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-medium">
-                      {formatRupiah(transaction.amount)}
+                      {formatCurrency(transaction.amount, currency)}
                     </p>
                     <p 
                       className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${getStatusColor(transaction.status)}`}
                     >
-                      {transaction.status}
+                      {t(`status.${transaction.status.toLowerCase()}`, language)}
                     </p>
                   </div>
                 </div>
@@ -315,15 +321,15 @@ export default function DashboardPage() {
               href="/sales/invoice" 
               className="text-sm text-blue-600 hover:underline dark:text-blue-400"
             >
-              Lihat semua transaksi
+              {t('dashboard.view_all_transactions', language)}
             </a>
           </CardFooter>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Pembayaran Jatuh Tempo</CardTitle>
+            <CardTitle>{t('dashboard.due_payments', language)}</CardTitle>
             <CardDescription>
-              Daftar pembayaran vendor yang akan jatuh tempo
+              {t('dashboard.vendor_payments_due', language)}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -344,18 +350,18 @@ export default function DashboardPage() {
                         {payment.vendor}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {payment.id} • Jatuh tempo: {formatShortDate(payment.date)}
+                        {payment.id} • {t('dashboard.due_date', language)}: {formatShortDate(payment.date, language === 'id' ? 'id-ID' : 'en-US')}
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-medium">
-                      {formatRupiah(payment.amount)}
+                      {formatCurrency(payment.amount, currency)}
                     </p>
                     <p 
                       className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-400"
                     >
-                      Menunggu
+                      {t('status.pending', language)}
                     </p>
                   </div>
                 </div>
@@ -367,7 +373,7 @@ export default function DashboardPage() {
               href="/purchase/invoice" 
               className="text-sm text-blue-600 hover:underline dark:text-blue-400"
             >
-              Lihat semua pembayaran
+              {t('dashboard.view_all_payments', language)}
             </a>
           </CardFooter>
         </Card>
@@ -376,9 +382,9 @@ export default function DashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 mb-6">
         <Card>
           <CardHeader>
-            <CardTitle>Produk Terlaris</CardTitle>
+            <CardTitle>{t('dashboard.top_products', language)}</CardTitle>
             <CardDescription>
-              Produk dengan penjualan tertinggi bulan ini
+              {t('dashboard.top_selling_products', language)}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -397,9 +403,9 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Tren Stok</CardTitle>
+            <CardTitle>{t('dashboard.stock_trend', language)}</CardTitle>
             <CardDescription>
-              Pergerakan nilai stok dalam 6 bulan terakhir
+              {t('dashboard.stock_value_movement', language)}
             </CardDescription>
           </CardHeader>
           <CardContent>

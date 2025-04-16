@@ -7,13 +7,19 @@ import {
   Settings, 
   ChevronDown, 
   Moon,
-  Sun
+  Sun,
+  Globe
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { CurrencySelector } from "@/components/ui/currency-selector";
+import { LanguageSelector } from "@/components/ui/language-selector";
+import { useLanguage } from "@/hooks/use-language";
+import { t } from "@/lib/translations";
 
 export default function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
   const [darkMode, setDarkMode] = useState(false);
+  const { language } = useLanguage();
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -39,12 +45,22 @@ export default function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
         <Search className="absolute left-3 h-4 w-4 text-gray-400" />
         <input
           type="text"
-          placeholder="Cari..."
+          placeholder={t('common.search', language)}
           className="pl-10 pr-4 py-2 w-full text-sm bg-gray-100 dark:bg-gray-800 border-0 rounded-md focus:ring-2 focus:ring-primary focus:outline-none"
         />
       </div>
 
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-3">
+        {/* Language Selector */}
+        <div className="hidden md:block">
+          <LanguageSelector />
+        </div>
+        
+        {/* Currency Selector */}
+        <div className="hidden md:block">
+          <CurrencySelector />
+        </div>
+        
         <button 
           onClick={toggleDarkMode}
           className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
