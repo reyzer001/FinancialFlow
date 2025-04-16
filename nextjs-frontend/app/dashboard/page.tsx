@@ -1,213 +1,422 @@
-'use client';
+"use client";
 
-import DashboardLayout from '@/components/layout/dashboard-layout';
+import React from "react";
+import DashboardLayout from "@/components/layout/dashboard-layout";
+import { formatRupiah, formatShortDate, getStatusColor } from "@/lib/utils";
 import { 
-  ArrowDownRight, ArrowUpRight, DollarSign, 
-  CreditCard, TrendingUp, TrendingDown, Clock 
-} from 'lucide-react';
+  AreaChart, 
+  BarChartComponent, 
+  DonutChart, 
+  LineChart 
+} from "@/components/charts";
+import { 
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardFooter, 
+  CardHeader, 
+  CardTitle 
+} from "@/components/ui/card";
+import { 
+  Tabs, 
+  TabsContent, 
+  TabsList, 
+  TabsTrigger 
+} from "@/components/ui/tabs";
+import { 
+  ArrowDown, 
+  ArrowUp, 
+  CreditCard, 
+  DollarSign, 
+  FileText, 
+  Package2, 
+  ShoppingCart, 
+  Users
+} from "lucide-react";
+
+// Sample data untuk dashboard
+// Pada implementasi sebenarnya, data ini akan diambil dari API
+
+const salesData = [
+  { name: "Jan", total: 540000000 },
+  { name: "Feb", total: 368000000 },
+  { name: "Mar", total: 820000000 },
+  { name: "Apr", total: 670000000 },
+  { name: "Mei", total: 490000000 },
+  { name: "Jun", total: 750000000 },
+  { name: "Jul", total: 890000000 },
+  { name: "Agu", total: 650000000 },
+  { name: "Sep", total: 720000000 },
+  { name: "Okt", total: 550000000 },
+  { name: "Nov", total: 680000000 },
+  { name: "Des", total: 920000000 },
+];
+
+const purchaseData = [
+  { name: "Jan", total: 280000000 },
+  { name: "Feb", total: 220000000 },
+  { name: "Mar", total: 500000000 },
+  { name: "Apr", total: 350000000 },
+  { name: "Mei", total: 270000000 },
+  { name: "Jun", total: 350000000 },
+  { name: "Jul", total: 470000000 },
+  { name: "Agu", total: 380000000 },
+  { name: "Sep", total: 430000000 },
+  { name: "Okt", total: 330000000 },
+  { name: "Nov", total: 400000000 },
+  { name: "Des", total: 590000000 },
+];
+
+const profitData = salesData.map((item, index) => ({
+  name: item.name,
+  penjualan: item.total,
+  pembelian: purchaseData[index].total,
+  laba: item.total - purchaseData[index].total,
+}));
+
+const categoryData = [
+  { name: "Elektronik", value: 420000000 },
+  { name: "Furnitur", value: 180000000 },
+  { name: "Perlengkapan", value: 150000000 },
+  { name: "Pakaian", value: 110000000 },
+  { name: "Lainnya", value: 45000000 },
+];
+
+const recentTransactions = [
+  {
+    id: "INV-001",
+    customer: "PT ABC Makmur",
+    status: "Lunas",
+    date: new Date(2024, 1, 15),
+    amount: 15000000,
+  },
+  {
+    id: "INV-002",
+    customer: "CV XYZ Jaya",
+    status: "Menunggu",
+    date: new Date(2024, 2, 3),
+    amount: 8700000,
+  },
+  {
+    id: "INV-003",
+    customer: "PT Sejahtera Utama",
+    status: "Lunas",
+    date: new Date(2024, 2, 8),
+    amount: 12500000,
+  },
+  {
+    id: "INV-004",
+    customer: "UD Berkah Abadi",
+    status: "Menunggu",
+    date: new Date(2024, 2, 10),
+    amount: 6300000,
+  },
+  {
+    id: "INV-005",
+    customer: "PT Mitra Sentosa",
+    status: "Lunas",
+    date: new Date(2024, 2, 15),
+    amount: 9800000,
+  },
+];
+
+const duePayments = [
+  {
+    id: "AP-001",
+    vendor: "PT Supplier Utama",
+    date: new Date(2024, 2, 20),
+    amount: 7500000,
+  },
+  {
+    id: "AP-002",
+    vendor: "CV Distributor Jaya",
+    date: new Date(2024, 2, 22),
+    amount: 4200000,
+  },
+  {
+    id: "AP-003",
+    vendor: "UD Material Sejahtera",
+    date: new Date(2024, 2, 25),
+    amount: 8300000,
+  },
+];
 
 export default function DashboardPage() {
-  // Placeholder dashboard data
-  const dashboardMetrics = {
-    totalRevenue: 98500000,
-    totalExpenses: 45700000,
-    accountsReceivable: 25800000,
-    accountsPayable: 15400000,
-    revenueChange: 15.8,
-    expensesChange: 8.2,
-    receivableChange: -5.3,
-    payableChange: 12.7,
-  };
-
-  // Format currency in Indonesian Rupiah
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
-  
-  // Placeholder recent transactions data
-  const recentTransactions = [
-    { id: 1, date: '2023-04-15', description: 'Invoice #INV-2023-0042', type: 'sales', amount: 7500000 },
-    { id: 2, date: '2023-04-14', description: 'Purchase #PO-2023-0021', type: 'purchase', amount: -4200000 },
-    { id: 3, date: '2023-04-12', description: 'Invoice #INV-2023-0041', type: 'sales', amount: 5350000 },
-    { id: 4, date: '2023-04-10', description: 'Payment from PT Maju Jaya', type: 'payment', amount: 9800000 },
-    { id: 5, date: '2023-04-08', description: 'Electricity Bill Payment', type: 'expense', amount: -1750000 },
-  ];
-
   return (
     <DashboardLayout>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-500">Overview of your business performance</p>
-      </div>
-
-      {/* Key metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {/* Total Revenue */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <p className="text-sm font-medium text-gray-500">Total Revenue</p>
-              <h3 className="text-2xl font-bold text-gray-900">
-                {formatCurrency(dashboardMetrics.totalRevenue)}
-              </h3>
-            </div>
-            <div className="p-2 bg-green-100 rounded-full">
-              <DollarSign className="h-6 w-6 text-green-600" />
-            </div>
-          </div>
-          <div className="flex items-center">
-            <div className={`flex items-center ${dashboardMetrics.revenueChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {dashboardMetrics.revenueChange >= 0 ? (
-                <ArrowUpRight className="h-4 w-4 mr-1" />
-              ) : (
-                <ArrowDownRight className="h-4 w-4 mr-1" />
-              )}
-              <span className="text-sm font-medium">{Math.abs(dashboardMetrics.revenueChange)}%</span>
-            </div>
-            <span className="text-sm text-gray-500 ml-2">from last month</span>
-          </div>
-        </div>
-
-        {/* Total Expenses */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <p className="text-sm font-medium text-gray-500">Total Expenses</p>
-              <h3 className="text-2xl font-bold text-gray-900">
-                {formatCurrency(dashboardMetrics.totalExpenses)}
-              </h3>
-            </div>
-            <div className="p-2 bg-red-100 rounded-full">
-              <CreditCard className="h-6 w-6 text-red-600" />
-            </div>
-          </div>
-          <div className="flex items-center">
-            <div className={`flex items-center ${dashboardMetrics.expensesChange >= 0 ? 'text-red-600' : 'text-green-600'}`}>
-              {dashboardMetrics.expensesChange >= 0 ? (
-                <ArrowUpRight className="h-4 w-4 mr-1" />
-              ) : (
-                <ArrowDownRight className="h-4 w-4 mr-1" />
-              )}
-              <span className="text-sm font-medium">{Math.abs(dashboardMetrics.expensesChange)}%</span>
-            </div>
-            <span className="text-sm text-gray-500 ml-2">from last month</span>
-          </div>
-        </div>
-
-        {/* Accounts Receivable */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <p className="text-sm font-medium text-gray-500">Accounts Receivable</p>
-              <h3 className="text-2xl font-bold text-gray-900">
-                {formatCurrency(dashboardMetrics.accountsReceivable)}
-              </h3>
-            </div>
-            <div className="p-2 bg-blue-100 rounded-full">
-              <TrendingUp className="h-6 w-6 text-blue-600" />
-            </div>
-          </div>
-          <div className="flex items-center">
-            <div className={`flex items-center ${dashboardMetrics.receivableChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {dashboardMetrics.receivableChange >= 0 ? (
-                <ArrowUpRight className="h-4 w-4 mr-1" />
-              ) : (
-                <ArrowDownRight className="h-4 w-4 mr-1" />
-              )}
-              <span className="text-sm font-medium">{Math.abs(dashboardMetrics.receivableChange)}%</span>
-            </div>
-            <span className="text-sm text-gray-500 ml-2">from last month</span>
-          </div>
-        </div>
-
-        {/* Accounts Payable */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <p className="text-sm font-medium text-gray-500">Accounts Payable</p>
-              <h3 className="text-2xl font-bold text-gray-900">
-                {formatCurrency(dashboardMetrics.accountsPayable)}
-              </h3>
-            </div>
-            <div className="p-2 bg-yellow-100 rounded-full">
-              <TrendingDown className="h-6 w-6 text-yellow-600" />
-            </div>
-          </div>
-          <div className="flex items-center">
-            <div className={`flex items-center ${dashboardMetrics.payableChange >= 0 ? 'text-red-600' : 'text-green-600'}`}>
-              {dashboardMetrics.payableChange >= 0 ? (
-                <ArrowUpRight className="h-4 w-4 mr-1" />
-              ) : (
-                <ArrowDownRight className="h-4 w-4 mr-1" />
-              )}
-              <span className="text-sm font-medium">{Math.abs(dashboardMetrics.payableChange)}%</span>
-            </div>
-            <span className="text-sm text-gray-500 ml-2">from last month</span>
-          </div>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">
+            Periode: {new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}
+          </span>
         </div>
       </div>
 
-      {/* Recent Transactions */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="font-semibold text-lg text-gray-900">Recent Transactions</h2>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 text-left">
-              <tr>
-                <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Amount</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Total Penjualan
+            </CardTitle>
+            <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {formatRupiah(8120000000)}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              <span className="text-emerald-500 flex items-center">
+                <ArrowUp className="mr-1 h-3 w-3" />
+                +18.2%
+              </span>{" "}
+              dari bulan lalu
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Total Pembelian
+            </CardTitle>
+            <CreditCard className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {formatRupiah(4570000000)}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              <span className="text-emerald-500 flex items-center">
+                <ArrowUp className="mr-1 h-3 w-3" />
+                +7.5%
+              </span>{" "}
+              dari bulan lalu
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Laba Kotor
+            </CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {formatRupiah(3550000000)}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              <span className="text-emerald-500 flex items-center">
+                <ArrowUp className="mr-1 h-3 w-3" />
+                +12.8%
+              </span>{" "}
+              dari bulan lalu
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Jumlah Pelanggan
+            </CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">128</div>
+            <p className="text-xs text-muted-foreground mt-1">
+              <span className="text-emerald-500 flex items-center">
+                <ArrowUp className="mr-1 h-3 w-3" />
+                +4.6%
+              </span>{" "}
+              dari bulan lalu
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-7 mb-6">
+        <Card className="md:col-span-5">
+          <CardHeader>
+            <CardTitle>Penjualan vs Pembelian vs Laba</CardTitle>
+            <CardDescription>
+              Perbandingan nilai penjualan, pembelian, dan laba yang dihasilkan selama 12 bulan terakhir
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <LineChart 
+              data={profitData} 
+              dataKeys={["penjualan", "pembelian", "laba"]} 
+              height={350}
+            />
+          </CardContent>
+        </Card>
+        <Card className="md:col-span-2">
+          <CardHeader>
+            <CardTitle>Penjualan per Kategori</CardTitle>
+            <CardDescription>
+              Distribusi penjualan berdasarkan kategori produk
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <DonutChart 
+              data={categoryData} 
+              height={350}
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 mb-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Transaksi Terkini</CardTitle>
+            <CardDescription>
+              Daftar transaksi penjualan terbaru
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
               {recentTransactions.map((transaction) => (
-                <tr key={transaction.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <div className="flex items-center">
-                      <Clock className="h-4 w-4 text-gray-400 mr-2" />
-                      {new Date(transaction.date).toLocaleDateString('id-ID', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric',
-                      })}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {transaction.description}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                        ${transaction.type === 'sales' ? 'bg-green-100 text-green-800' : ''}
-                        ${transaction.type === 'purchase' ? 'bg-yellow-100 text-yellow-800' : ''}
-                        ${transaction.type === 'payment' ? 'bg-blue-100 text-blue-800' : ''}
-                        ${transaction.type === 'expense' ? 'bg-red-100 text-red-800' : ''}
-                      `}
+                <div
+                  key={transaction.id}
+                  className="flex items-center justify-between"
+                >
+                  <div className="flex items-center space-x-4">
+                    <div 
+                      className="p-2.5 rounded-full bg-blue-100 dark:bg-blue-900"
                     >
-                      {transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}
-                    </span>
-                  </td>
-                  <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium text-right ${transaction.amount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {formatCurrency(transaction.amount)}
-                  </td>
-                </tr>
+                      <FileText className="h-4 w-4 text-blue-700 dark:text-blue-300" />
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-medium">
+                        {transaction.customer}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {transaction.id} • {formatShortDate(transaction.date)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-medium">
+                      {formatRupiah(transaction.amount)}
+                    </p>
+                    <p 
+                      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${getStatusColor(transaction.status)}`}
+                    >
+                      {transaction.status}
+                    </p>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="px-6 py-4 border-t border-gray-200">
-          <a href="/accounting/transactions" className="text-sm font-medium text-primary-600 hover:text-primary-500">
-            View all transactions
-          </a>
-        </div>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <a 
+              href="/sales/invoice" 
+              className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+            >
+              Lihat semua transaksi
+            </a>
+          </CardFooter>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Pembayaran Jatuh Tempo</CardTitle>
+            <CardDescription>
+              Daftar pembayaran vendor yang akan jatuh tempo
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {duePayments.map((payment) => (
+                <div
+                  key={payment.id}
+                  className="flex items-center justify-between"
+                >
+                  <div className="flex items-center space-x-4">
+                    <div 
+                      className="p-2.5 rounded-full bg-amber-100 dark:bg-amber-900"
+                    >
+                      <CreditCard className="h-4 w-4 text-amber-700 dark:text-amber-300" />
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-medium">
+                        {payment.vendor}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {payment.id} • Jatuh tempo: {formatShortDate(payment.date)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-medium">
+                      {formatRupiah(payment.amount)}
+                    </p>
+                    <p 
+                      className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-400"
+                    >
+                      Menunggu
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+          <CardFooter>
+            <a 
+              href="/purchase/invoice" 
+              className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+            >
+              Lihat semua pembayaran
+            </a>
+          </CardFooter>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 mb-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Produk Terlaris</CardTitle>
+            <CardDescription>
+              Produk dengan penjualan tertinggi bulan ini
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <BarChartComponent 
+              data={[
+                { name: "Laptop X1", total: 156000000 },
+                { name: "Monitor 24\"", total: 124000000 },
+                { name: "Smartphone A12", total: 98000000 },
+                { name: "Printer MX100", total: 86000000 },
+                { name: "Kursi Kantor", total: 72000000 },
+              ]} 
+              dataKey="total" 
+              height={300}
+            />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Tren Stok</CardTitle>
+            <CardDescription>
+              Pergerakan nilai stok dalam 6 bulan terakhir
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <AreaChart 
+              data={[
+                { name: "Jul", total: 1850000000 },
+                { name: "Agu", total: 1920000000 },
+                { name: "Sep", total: 1780000000 },
+                { name: "Okt", total: 1950000000 },
+                { name: "Nov", total: 2080000000 },
+                { name: "Des", total: 2150000000 },
+              ]} 
+              dataKey="total" 
+              height={300}
+            />
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
   );
